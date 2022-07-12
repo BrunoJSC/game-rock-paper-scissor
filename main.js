@@ -1,53 +1,52 @@
-// const user = prompt("Ecolha entre pedra papel e tesoura");
-let player = 0;
-let computer = 0;
+const buttons = document.querySelectorAll('button');
 
-function computerPlayer() {
-  const array = ["Paper", "Sissor", "Rock"];
+let playerScore = 0;
+let computerScore = 0;
 
-  const newArray = Math.floor(Math.random() * array.length);
+function computerSelection() {
+  let array = ['paper', 'scissor', 'rock'];
+  let newArray = Math.floor(Math.random() * array.length);
   return array[newArray];
 }
 
-function playRound(playerSelection, computerSelection) {
- // const user = prompt('Digite');
+function disabledButton() {
+  buttons.forEach(button => {
+    button.disabled = true;
+  });
+}
+
+function playRound(playerSelection, computer) {
+  // const computer = computerSelection();
+  let result = "";
 
   if (
-    (playerSelection === "Scissor" && computerSelection === "Paper") ||
-    (playerSelection === "Paper" && computerSelection === "Rock") ||
-    (playerSelection === "Rock" && computerSelection === "Scissor")
+    (playerSelection === 'paper' && computer === 'rock')
+    || (playerSelection === 'rock' && computer === 'scissor')
+    || (playerSelection === 'scissor' && computer === 'paper')
   ) {
-    console.log(playerSelection + " Player Win!");
-  } else if (
-    (playerSelection === "Scissor" && computerSelection === "Scissor") ||
-    (playerSelection === "Paper" && computerSelection === "Paper") ||
-    (playerSelection === "Rock" && computerSelection === "Rock")
-  ) {
-    console.log(playerSelection+ " " + " " + computerSelection + " Empaty");
+    playerScore++;
+    result = 'PLAYER win ' + playerScore;
+
+    if (playerScore === 5) {
+      disabledButton();
+    }
+  } else if (playerSelection === computer) {
+    result = 'Empate';
   } else {
-    console.log(computerSelection + " Computer Win!");
- }
-
-  if(playerSelection !== "Rock" || "rock" || "Paper" || "paper" || "Scissor" || "scissor") {
-    console.log('Error');
-  }
-}
-
-function game() {
-  for(let i = 0; i <= 5; i++) {
-    if(i !== 0) {
-      const user = prompt('Digite');
-      user.toUpperCase();
-      user.toLowerCase();
-
-      const computer = computerPlayer();
-      playRound(user, computer);
-
-      if(i === 5) {
-        console.log(playRound(user + " Player ganhou a partida WIN") || (computerPlayer + " Computer ganhou a rodada WIN"));
-      }
+    computerScore++;
+    result = 'COMPUTER WIN!!! ' + computerScore;
+    if (computerScore === 5) {
+      disabledButton();
     }
   }
+  document.getElementById('result').innerHTML = result;
 }
 
-game();
+const computer = computerSelection();
+
+
+buttons.forEach(button => {
+  button.addEventListener('click', () => {
+    playRound(button.value, computer);
+  });
+});
